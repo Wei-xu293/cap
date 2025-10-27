@@ -3,8 +3,6 @@
 (defn mides [ls] 
   (apply + (filter odd? (map count ls))))
 
-(defn getSnd [name age] )
-
 (defn noms [ls]
   (sort (map (comp symbol key) (filter #(> (val %) 18) ls))))
 
