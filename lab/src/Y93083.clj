@@ -17,6 +17,10 @@
   (/ (reduce + ls) (my-count ls)))
 
 (println (average '(2 1 3)))
-;(build-palindrome '(2 1 3))
+
+(defn build-palindrome [ls] 
+  (reduce #(conj %1 %2) ls ls))
+
+(println (build-palindrome '(2 1 3)))
 ;(odds-n-evens '(1 2 3))
 ;(remove-list '(1 2 3 4) '(1 2))
