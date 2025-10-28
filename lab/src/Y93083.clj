@@ -1,26 +1,29 @@
 (ns Y93083)
 
-(defn power [x p]
-  (reduce * (repeat p x)))
+(defn power [x p] (reduce * (repeat p x)))
 
-(println (power 2 3))
+(defn myc [val elem] (if (nil? elem) val (inc val)))
 
-(defn myc [val elem]
-  (if (nil? elem) val (inc val)))
+(defn my-count [ls] (reduce myc 0 ls))
 
-(defn my-count [ls]
-  (reduce myc 0 ls))
+(defn average [ls] (/ (reduce + ls) (my-count ls)))
 
-(println (my-count '(2 1 3)))
+(defn build-palindrome [ls] (reduce #(conj %1 %2) ls ls))
 
-(defn average [ls] 
-  (/ (reduce + ls) (my-count ls)))
+(defn odds-n-evens [ls] (let [result (reduce (fn [[odds evens] x] (if (odd? x) [(conj odds x) evens] [odds (conj evens x)])) [[] []] ls)] (map sequence result)))
 
-(println (average '(2 1 3)))
+(defn my-filter [f ls] (seq (reduce (fn [l x] (if (f x) (conj l x) l)) [] ls)))
 
-(defn build-palindrome [ls] 
-  (reduce #(conj %1 %2) ls ls))
+(defn exists [x ls] (not-empty (my-filter #(= x %) ls)))
 
-(println (build-palindrome '(2 1 3)))
-;(odds-n-evens '(1 2 3))
-;(remove-list '(1 2 3 4) '(1 2))
+(defn remove-list [lx ly]
+  (if (or (empty? ly) (empty? lx)) lx
+      (reverse (reduce (fn [l x] (if (exists x ly) l (conj l x))) '() lx))))
+
+;(defn remove-list [lx ly] 
+;  (let [ly-set (set ly)] 
+;    (reverse (reduce 
+;              (fn [acc x] 
+;                (if (ly-set x) acc (conj acc x))) 
+;              '() 
+;              lx))))
