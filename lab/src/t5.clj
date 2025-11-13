@@ -16,3 +16,7 @@
 
 (def fold foldr)
 
+(defn creixent [s] 
+  (let [ss (map vector s (rest s))]
+    (fold  #(and (< (first %1) (second %1)) %2) true ss)))
+
