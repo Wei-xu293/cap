@@ -2,3 +2,6 @@
 .lsp
 .cpcache
 gtis/
+.calva
+lab/src/out/
+.vscode
