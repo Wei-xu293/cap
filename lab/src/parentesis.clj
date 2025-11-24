@@ -41,8 +41,9 @@
 
 (defn objNQ [[c n psol]] (and (= (* 2 n) c) (balancejat psol)))
 
-(defn succNQ [[n psol]]
-  (letfn [(valid [])]))
+(defn succNQ [[c n psol]]
+  (for [i (range 0 2)]
+    [(inc c) n (conj psol (if (> i 0) \( \)))]))
 
 (defn solucions [n]
   (let [[[_ _ s] & cua] ((bTck succNQ objNQ) (initialNQ n))]
