@@ -37,13 +37,13 @@
     (fn [inicial] 
       (bTck' [inicial]))))
 
-(defn initialNQ [n] [0 n '()])
+(defn initialNQ [n] [0 n ""])
 
-(defn objNQ [[c n psol]] (and (= (* 2 n) c) (balancejat psol)))
+(defn objNQ [[c n psol]] (and (= n c) (balancejat psol)))
 
 (defn succNQ [[c n psol]]
   (for [i (range 0 2)]
-    [(inc c) n (conj psol (if (> i 0) \( \)))]))
+    [(inc c) n (str psol (if (> i 0) \( \)))]))
 
 (defn solucions [n]
   (let [[[_ _ s] & cua] ((bTck succNQ objNQ) (initialNQ n))]
@@ -51,3 +51,5 @@
 
 (defn nombre-solucions [n]
   (count ((bTck succNQ objNQ) (initialNQ n))))
+
+;(use 'parentesis :reload-all)
