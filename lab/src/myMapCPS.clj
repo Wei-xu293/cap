@@ -10,9 +10,4 @@
 (defn my-map-cps [f lst cont]
   (if (empty? lst) (cont lst)
        (let [[cap & cua] lst]
-         (cons (cont (f cap)) (my-map f cua)))))
-
-(defn my-map-cps-t [f lst cont] 
-  (if (empty? lst) #(cont lst)
-      (let [[cap & cua] lst]
-        #(my-map-cps-t f ))))
+         (my-map-cps f cua (fn [x] (cont (cons (f cap) x)))))))
