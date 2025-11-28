@@ -39,10 +39,10 @@
 
 (defn initialNQ [n] [0 0 n ""])
 
-(defn objNQ [[o t n psol]] (and (= o t) (= o n)))
+(defn objNQ [[o t n _]] (and (= o t) (= o n)))
 
 (defn succNQ [[o t n psol]]
-  (letfn [(valid [psol [o t]] 
+  (letfn [(valid [_ [o t]] 
                  (and (>= o t) 
                       (<= o n)))]
     (for [[open closed op] [[(inc o) t true] [o (inc t) false]]
