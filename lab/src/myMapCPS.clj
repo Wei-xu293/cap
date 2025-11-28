@@ -24,3 +24,24 @@
         cua
         (fn [mapped-tail]
           (fn [] (k (cons (f cap) mapped-tail))))))))
+
+
+(defn my-filter-cps [p s k]
+  (if (empty? s) (k '())
+      (let [[x & xs] s]
+        (recur p xs 
+               (fn [mapped_xs] (k (if (p x) (cons x mapped_xs) mapped_xs)))))))
+
+(def numbers [1 2 3 4 5 6 7 8 9 10])
+(def t (range 0 1000000))
+
+(defn my-filter [p s] 
+  (letfn [(my-filter-cps-t [p s k]
+                           (if (empty? s) #(k '())
+                               (let [[x & xs] s] 
+                                 #(my-filter-cps-t p xs
+                                                 (fn [v]
+                                                   (fn [] (k (if (p x) (cons x v) v))))))))]
+    (trampoline my-filter-cps-t p s identity)))
+
+;; (count (my-filter even? t)) 👉 500000
