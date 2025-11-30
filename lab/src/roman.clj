@@ -22,11 +22,17 @@
         :else 0))
 
 (defn roman2int [ls]
-    (let [x (first ls) y (s) s (r2i2 x y)]
-    (+ (r2i x) (- (* 2 s)) (roman2int (rest ls)))))
+  (let [sz (count ls)]
+    (cond 
+      (= sz 0) 0
+      (= sz 1) (r2i (first ls))
+      :else (let [[x y & tail] ls r (r2i2 x y) xr (if (> r 0) (- (r2i x)) (r2i x))]
+              (+ xr (roman2int (cons y tail)))))))
 
 (defn roman2int2 [ls]
     (loop [a \P, l ls, acc 0]
         (if (empty? l) acc
             (let [b (first l) s (* 2 (r2i2 a b))]
                 (recur b (rest l) (- (+ acc (r2i b)) s))))))
+
+;; (use 'roman :reload-all)
