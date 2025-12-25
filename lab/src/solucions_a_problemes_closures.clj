@@ -46,7 +46,7 @@
 
 ;; Comprovem que els paràmetres a gg siguin positius
 ;; amb (assert (or (= -1 z) (pos? z)))
-(defn filtra [pred]
+(defn filtra1 [pred]
   (letfn [(ff [y]
             (letfn [(gg [z]
                       (assert (or (= -1 z) (pos? z)))
@@ -62,7 +62,7 @@
 
 ;; Només cal fer un petit canvi quan trobem -1:
 
-(defn filtra [pred]
+(defn filtra2 [pred]
   (letfn [(ff [y]
             (letfn [(gg [z]
                       (assert (or (= -1 z) (pos? z)))
