@@ -124,3 +124,18 @@
           (recur q result)
           (recur (conj q (:L top) (:R top))
                  (conj result (:val top))))))))
+
+
+
+(defn build [pre in]
+  (if (empty? pre)
+    nil
+    (let [root-val (first pre)
+          left-in (take-while #(not= root-val %) in)
+          right-in (rest (drop-while #(not= root-val %) in))
+          left-size (count left-in)
+          left-pre (take left-size (rest pre))
+          right-pre (drop left-size (rest pre))]
+      {:val root-val
+       :L (build left-pre left-in)
+       :R (build right-pre right-in)})))
