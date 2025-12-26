@@ -112,3 +112,15 @@
                (conj result (:val top))))
       
       :else (seq result))))
+
+(defn breadth-first [tree]
+  (loop [queue [tree]
+         result []] 
+    (if (empty? queue)
+      (seq result)
+      (let [top (first queue)
+            q (subvec queue 1)]
+        (if (nil? top)
+          (recur q result)
+          (recur (conj q (:L top) (:R top))
+                 (conj result (:val top))))))))
