@@ -40,11 +40,11 @@
 
 
 (defn mida-grans [input-str]
-  (transduce (comp 
-              (filter #(> (count %) 3)) 
-              (map count)) 
-             + 
-             0 
+  (transduce (comp
+              (filter #(> (count %) 3))
+              (map count))
+             +
+             0
              (split-by-space input-str)))
 
 (defn ordre-mida [lst]
@@ -52,3 +52,21 @@
        (into [] (filter #(> (count %) 5)))
        (sort-by count)
        vec))
+
+
+(defn taking [limit]
+  (fn [rf] 
+    (let [counter (volatile! limit)] 
+      (fn 
+        ([] rf)
+        ([result] (rf result))
+        ([result val] 
+         (if (pos? @counter) 
+          (do 
+            (vswap! counter dec) 
+            (rf result val)) 
+          (reduced result)))))))
+
+;; (transduce (taking 3) conj [1 2 3 4 5])
+;; (into [] (taking 3) [1 2 3 4 5])
+;; Result: [1 2 3]
