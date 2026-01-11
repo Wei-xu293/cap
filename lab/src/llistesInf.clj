@@ -18,10 +18,16 @@
 
 ;(def factorials (cons 1N (lazy-seq (map * natAtOne factorials))))
 
-(def factorials
-  (map first
-       (iterate (fn [[acc n]] [(* acc n) (inc n)])
-                [1N 1N])))
+(comment
+   (def factorials
+     (map first
+          (iterate (fn [[acc n]] [(* acc n) (inc n)])
+                   [1N 1N])))
+  )
+
+(def factorials 
+  (lazy-seq 
+   (cons 1N (map * factorials (iterate inc 2N)))))
 
 (def fibs
   (map first
@@ -60,4 +66,20 @@
       ;; It is Hamming if there are NO bad factors
       (empty? bad-factors))))
 
-(def hammings (filter isHamming? natAtOne))
+(defn merge-seqs [xs ys]
+  (lazy-seq 
+   (let [x (first xs)
+         y (first ys)
+         rxs (rest xs)
+         rys (rest ys)]
+     (cond
+       (< x y) (cons x (merge-seqs rxs ys))
+       (> x y) (cons y (merge-seqs xs rys))
+       :else (cons x (merge-seqs rxs rys))))))
+
+(def hammings
+  (cons 1N (lazy-seq
+            (let [mult-2 (map #(* 2 %) hammings)
+                  mult-3 (map #(* 3 %) hammings)
+                  mult-5 (map #(* 5 %) hammings)]
+              (merge-seqs mult-2 (merge-seqs mult-3 mult-5))))))
