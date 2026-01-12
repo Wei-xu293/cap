@@ -21,7 +21,7 @@
                                                   (fn [] (k (+ fn1 fn2))))))))))]
     (trampoline fib-cps-t n identity)))
 
-(defn fib-t [n]
+(defn fib-ta [n]
   (letfn [(fib-cps-t [n k]
             (if (< n 2)
               #(k n) ; Base case: Safe to use #()
