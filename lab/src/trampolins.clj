@@ -44,3 +44,20 @@
 
 ;; (time (fib-fast 40))
 ;; (time (fib-fast 1000))
+
+(defn sum-cps [n cont]
+  (if (= n 0) 
+    (cont 0)
+    (recur (dec n) 
+           (fn [res] (cont (+ res n))))))
+
+;; (sum-cps 10 identity)
+
+(defn sum-cps-t [n cont]
+  (if (zero? n)
+    #(cont 0)
+    (recur (dec n)
+           (fn [res]
+             (fn [] (cont (+ res n)))))))
+
+(defn sum-t [n] (trampoline sum-cps-t n identity))
