@@ -82,4 +82,29 @@
   (check-nothing "anything") ;; => true
   (check-nothing nil)        ;; => true
   )
-  
+
+(defn aplana-parcial [xs] 
+  (if (and (coll? xs) (not-any? coll? xs))
+    (list xs)
+    (mapcat aplana-parcial xs)))
+
+(comment
+  (aplana-parcial [["Fes"] ["Res"]])               ;👉 (["Fes"] ["Res"])
+  (aplana-parcial [[[[:a :b]]] [[:c :d]] [:e :f]]) ;👉 ([:a :b] [:c :d] [:e :f])
+  (aplana-parcial '((1 2) ((3 4) ((((5 6 7)))))))  ;👉 ((1 2) (3 4) (5 6 7))
+  )
+
+(defn merge-maps [f d & ds] 
+  (reduce (fn [dict m]
+             (reduce (fn [acc [k v]] 
+                       (if (contains? dict k) 
+                         (assoc acc k (f (get dict k) v)) 
+                         (assoc acc k v))) 
+                     dict m))
+          d ds))
+(comment
+  (merge-maps * {:a 2, :b 3, :c 4} {:a 2} {:b 2} {:c 5}) ;👉 {:a 4, :b 6, :c 20}
+  (merge-maps - {1 10, 2 20} {1 3, 2 10, 3 15})          ;👉 {1 7, 2 10, 3 15}
+  (merge-maps concat {:a [3], :b [6]} {:a [4 5], :c [8 9]} {:b [7]})
+  ;👉 {:a (3 4 5), :b (6 7), :c [8 9]}
+  )
