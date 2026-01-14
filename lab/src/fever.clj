@@ -13,5 +13,5 @@
       (seq res)
       (let [[cap & cua] xs]
         (if (coll? cap)
-          (recur cua (into res (my-flatten cap)))
+          (recur (concat cap cua) res)
           (recur cua (conj res cap)))))))
