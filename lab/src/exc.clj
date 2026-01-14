@@ -108,3 +108,67 @@
   (merge-maps concat {:a [3], :b [6]} {:a [4 5], :c [8 9]} {:b [7]})
   ;👉 {:a (3 4 5), :b (6 7), :c [8 9]}
   )
+
+(defn balancejat [a-seq]
+  (let [obrir #{\[ \(}
+        cerrat {\] \[, \) \(}
+        res (reduce (fn [pila par]
+                      (cond 
+                        (obrir par) (conj pila par)
+                        (empty? pila) (reduced false)
+                        :else (if (= (peek pila) (cerrat par))
+                          (pop pila)
+                          (reduced false)))) 
+                    [] 
+                    a-seq)]
+    (if (false? res)
+      false
+      (empty? res))))
+
+(comment
+  (balancejat "()")                 ;👉 true
+  (balancejat "[](")                ;👉 false
+  (balancejat "([()][()()[]])")     ;👉 true
+  (balancejat "[]()[(())]([]")      ;👉 false
+  (balancejat '(\[ \( \) \( \) \])) ;👉 true
+  )
+
+(defn my-juxt [& fs]
+  (fn [& xs]
+    (concat (reduce (fn [acc f]
+                      (conj acc (apply f xs))) 
+                    []
+                    fs))))
+
+(comment
+  ((my-juxt + max min) 2 3 5 1 6 4)                   ;👉 (21 6 1)
+  ((my-juxt :a :c :b) {:a 2, :b 4, :c 6, :d 8 :e 10}) ;👉 (2 6 4)
+  )
+
+(defn my-partition [n coll]
+  (loop [src coll
+         res []]
+    (let [chunk (take n src)]
+      (if (= n (count chunk))
+        (recur (drop n src) (conj res chunk))
+        (seq res)))))
+
+(comment
+  (defn my-partition [n a-seq]
+    (loop [res '()
+           aux '()
+           idx 0
+           xs a-seq]
+      (if (empty? xs)
+        (if (= (count aux) n)
+          (reverse (conj res (reverse aux)))
+          (reverse res))
+        (let [[h & t] xs]
+          (if (= idx n)
+            (recur (conj res (reverse aux)) (list h) 1 t)
+            (recur res (conj aux h) (inc idx) t))))))
+  
+  (my-partition 3 (range 9)) ;👉 ((0 1 2) (3 4 5) (6 7 8))
+  (my-partition 2 (range 8)) ;👉 ((0 1) (2 3) (4 5) (6 7))
+  (my-partition 3 (range 8)) ;👉 ((0 1 2) (3 4 5))
+  )
