@@ -167,8 +167,29 @@
           (if (= idx n)
             (recur (conj res (reverse aux)) (list h) 1 t)
             (recur res (conj aux h) (inc idx) t))))))
-  
+
+  (defn my-partition [n coll]
+    (lazy-seq
+     (let [chunk (take n coll)]
+       (if (= n (count chunk))
+         (cons chunk (my-partition n (drop n coll)))
+         nil)))) 
+
   (my-partition 3 (range 9)) ;👉 ((0 1 2) (3 4 5) (6 7 8))
   (my-partition 2 (range 8)) ;👉 ((0 1) (2 3) (4 5) (6 7))
   (my-partition 3 (range 8)) ;👉 ((0 1 2) (3 4 5))
+  )
+
+(defn my-frequencies [coll]
+  (foldr (fn [k acc] 
+           (if (acc k)
+             (update acc k inc)
+             (assoc acc k 1))) 
+         (sorted-map)
+         coll))
+
+(comment
+  (my-frequencies [1 1 2 3 2 1 1])      ;👉 {1 4, 2 2, 3 1}
+  (my-frequencies [:b :a :b :a :b])     ;👉 {:a 2, :b 3}
+  (my-frequencies '([1 2] [1 3] [1 3])) ;👉 {[1 2] 1, [1 3] 2}
   )
